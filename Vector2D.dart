@@ -12,14 +12,14 @@ class Vector2D {
         x = tmp;
     } 
    
-    num magnitude() {
-        return Math.sqrt(x*x+y*y);
-    }
-   
     void normalize() {
-        num length = magnitude();
+        num length = magnitude;
         x /= length;
         y /= length;
+    }
+   
+    num get magnitude() {
+        return Math.sqrt(x*x+y*y);
     }
    
     num cross(Vector2D v) {

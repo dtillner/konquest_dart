@@ -92,39 +92,39 @@ vector2DTests() {
         });
     });
     
-    group('Magnitude', () {
-        test('Test 1', () {
-            Vector2D v = new Vector2D(5,6);
-            Expect.equals(Math.sqrt(5*5+6*6), v.magnitude());
-        });
-      
-        test('Test 2', () {
-            Vector2D v = new Vector2D(0,0);
-            Expect.equals(0, v.magnitude());
-        });
-      
-        test('Test 3', () {
-            Vector2D v = new Vector2D(-5,6);
-            Expect.equals(Math.sqrt(-5*-5+6*6), v.magnitude());
-        });
-      
-        test('Test 4', () {
-            Vector2D v = new Vector2D(5,-6);
-            Expect.equals(Math.sqrt(5*5+(-6)*-6), v.magnitude());
-        });
-      
-        test('Test 5', () {
-            Vector2D v = new Vector2D(-5,-6);
-            Expect.equals(Math.sqrt((-5)*(-5)+(-6)*(-6)), v.magnitude());
-        });
-    });
-    
     group('Normalize', () {
         test('Test 1', () {
             Vector2D v = new Vector2D(3,4);
             v.normalize();
             Expect.equals(0.6, v.x);
             Expect.equals(0.8, v.y);
+        });
+    });
+
+    group('Magnitude', () {
+        test('Test 1', () {
+            Vector2D v = new Vector2D(5,6);
+            Expect.equals(Math.sqrt(5*5+6*6), v.magnitude);
+        });
+      
+        test('Test 2', () {
+            Vector2D v = new Vector2D(0,0);
+            Expect.equals(0, v.magnitude);
+        });
+      
+        test('Test 3', () {
+            Vector2D v = new Vector2D(-5,6);
+            Expect.equals(Math.sqrt(-5*-5+6*6), v.magnitude);
+        });
+      
+        test('Test 4', () {
+            Vector2D v = new Vector2D(5,-6);
+            Expect.equals(Math.sqrt(5*5+(-6)*-6), v.magnitude);
+        });
+      
+        test('Test 5', () {
+            Vector2D v = new Vector2D(-5,-6);
+            Expect.equals(Math.sqrt((-5)*(-5)+(-6)*(-6)), v.magnitude);
         });
     });
 
