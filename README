@@ -3,6 +3,8 @@ Some svg and dart experiments...
 To use dart unit tests checkout:
 svn checkout http://dart.googlecode.com/svn/branches/bleeding_edge/dart/lib/unittest/
 
+http://dtillner.github.com/konquest_dart/konquest.svg
+
 Tested with:
 dart-sdk: r6802
 dartium: dev-build-133142
