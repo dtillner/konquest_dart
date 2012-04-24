@@ -46,7 +46,7 @@ class Planet extends Circle {
 class Konquest {
     Vector2D screenSize;
     Circle sun;
-    List<Circle> planets;
+    List<Planet> planets;
     List<Circle> grid;
     
     Konquest() {
@@ -85,15 +85,16 @@ class Konquest {
         window.setInterval((){update();}, 1000 / 25);
         window.addEventListener('resize', (e){resize();});
     }
-    
-    void resize() {
+
+    void resize() {                
         Vector2D oldScreenSize = new Vector2D(screenSize.x, screenSize.y);
         screenSize.x = window.innerWidth;
         screenSize.y = window.innerHeight;
         
-        Vector2D scale = screenSize / oldScreenSize;      
+        Vector2D scale = screenSize / oldScreenSize;
+        Vector2D scale2 = screenSize / (grid[0].size * 2);
         
-        num maxScale = (screenSize.x > screenSize.y) ? scale.y : scale.x;
+        num maxScale = (screenSize.x > screenSize.y) ? scale2.y : scale2.x;
         
         for(int i=0; i<grid.length; i++) {
             grid[i].center *= scale;

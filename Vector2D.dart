@@ -18,35 +18,19 @@ class Vector2D {
         y /= length;
     }
    
-    num get magnitude() {
-        return Math.sqrt(x*x+y*y);
-    }
+    num get magnitude() => Math.sqrt(x*x+y*y);
    
-    num cross(Vector2D v) {
-        return x*v.y - y*v.x;
-    }
+    num cross(Vector2D v) => x*v.y - y*v.x;
    
-    Vector2D negate() {
-        return new Vector2D(-x, -y);
-    }
+    Vector2D negate() => new Vector2D(-x, -y);
    
-    Vector2D operator+(d) {
-        return (d is num) ? new Vector2D(x + d, y + d) : new Vector2D(x + d.x, y + d.y);
-    }
+    Vector2D operator+(d) => (d is num) ? new Vector2D(x + d, y + d) : new Vector2D(x + d.x, y + d.y);
 
-    Vector2D operator-(d) {
-        return (d is num) ? new Vector2D(x - d, y - d) : new Vector2D(x - d.x, y - d.y);
-    }
+    Vector2D operator-(d) => (d is num) ? new Vector2D(x - d, y - d) : new Vector2D(x - d.x, y - d.y);
 
-    Vector2D operator*(d) {
-        return (d is num) ? new Vector2D(x * d, y * d) : new Vector2D(x * d.x, y * d.y);
-    }
+    Vector2D operator*(d) => (d is num) ? new Vector2D(x * d, y * d) : new Vector2D(x * d.x, y * d.y);
 
-    Vector2D operator/(d) {       
-        return (d is num) ? new Vector2D(x / d, y / d) : new Vector2D(x / d.x, y / d.y);
-    }
+    Vector2D operator/(d) => (d is num) ? new Vector2D(x / d, y / d) : new Vector2D(x / d.x, y / d.y);
 
-    String toString() {
-        return '(${x.toStringAsFixed(3)}, ${y.toStringAsFixed(3)})';
-    }
+    String toString() => '(${x.toStringAsFixed(3)}, ${y.toStringAsFixed(3)})';
 }
