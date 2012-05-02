@@ -1,5 +1,5 @@
 #import('dart:dom');
-#source('Vector2D.dart');
+#import('lib/Toolbox.dart');
 
 final String svgNS = 'http://www.w3.org/2000/svg';
 
