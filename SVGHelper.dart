@@ -107,12 +107,13 @@ class TextField {
     }
     
     num get size() => _size;
-    set size(String size) {
+    set size(num size) {
         _size = size;
         _node.setAttribute('style', 'fill:$_color; font-family:$_font; font-size:$_size;');
         
-        for(int i=0; i<_lineNodes.length; i++) {
-            _lineNodes[i].setAttribute('dy', '${i*size}');
+        _lineNodes[0].setAttribute('dy', 0);
+        for(int i=1; i<_lineNodes.length; i++) {
+            _lineNodes[i].setAttribute('dy', size);
         }
     }
 }

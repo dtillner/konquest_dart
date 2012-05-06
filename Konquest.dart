@@ -14,19 +14,22 @@ class Planet extends Circle {
     Planet() {
         _text = new TextField(2);        
         _text.font = 'Iceland';
+        _text.size = 15;
     }
      
     set size(num size) {
+        num oldSize = super.size;
         super.size = size;
-        //TODO: correct font size and position;
-        _text.size = 15;
+        
+        if(oldSize != null) {
+            num scale = size / oldSize;
+            _text.size *= scale;
+        }
     }
     
     set center(Vector2D center) {
         super.center = center;
-        //TODO: correct font size and position;
-        _text.position = super.center;
-        _text.size = 15;
+        _text.position = new Vector2D(center.x + size * 1.5, center.y);
     }
     
     int get player() => _player;
@@ -47,7 +50,7 @@ class Planet extends Circle {
     int get type() => _type;
     set type(int type) {
         _type = type;
-        _text.setLine(0, 'Planet Type: ${type+1}');
+        _text.setLine(0, 'Type: ${type+1}');
     }
     
     static List<Planet> Factory(int numOfPlanets) {
