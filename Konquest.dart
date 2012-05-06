@@ -6,15 +6,16 @@ class Planet extends Circle {
     TextField _text;
     int _ships;
     int _player;
+    int _type;
     num rotation;
 
+    static final List<String>playerColors = const ['white', 'red', 'blue'];
+
     Planet() {
-        _text = new TextField(2);
-        //TODO: player color;
-        _text.color = 'red';
+        _text = new TextField(2);        
         _text.font = 'Iceland';
     }
-    
+     
     set size(num size) {
         super.size = size;
         //TODO: correct font size and position;
@@ -31,7 +32,10 @@ class Planet extends Circle {
     int get player() => _player;
     set player(int player) {
         _player = player;
-        _text.setLine(0, 'Player: $player');
+        _text.color = playerColors[player];
+        
+        addGradient('Player${player}PlanetGradient', playerColors[_player], 'black');        
+        style = 'fill:url(#Player${player}PlanetGradient)';
     }
     
     int get ships() => _ships;
@@ -39,10 +43,51 @@ class Planet extends Circle {
         _ships = ships;
         _text.setLine(1, 'Ships: $ships');
     }
+    
+    int get type() => _type;
+    set type(int type) {
+        _type = type;
+        _text.setLine(0, 'Planet Type: ${type+1}');
+    }
+    
+    static List<Planet> Factory(int numOfPlanets) {
+        List<Planet> planets = new List<Planet>(numOfPlanets);
+        
+        num orbitRange = (Konquest.outerCircle - Konquest.innerCircle) / (numOfPlanets);
+        
+        for(int i=0; i<numOfPlanets; i++) {
+            planets[i] = new Planet();
+            
+            planets[i].type = (Math.random()*10).truncate() % 4;
+            planets[i].size = orbitRange * (0.2 + planets[i].type * 0.05); 
+
+            planets[i].center = new Vector2D(orbitRange*i + Konquest.innerCircle + orbitRange/2, 0);
+            planets[i].center.rotate(Math.random()*360);
+            planets[i].center += Konquest.screenSize / 2;
+            
+            planets[i].rotation = (Math.random() - 0.5) / 5;
+            
+           planets[i].player = 0;
+           planets[i].ships = (Math.random()*10).round();
+        }
+        
+        //TODO: this is ugly
+        num p1 = (Math.random() * 10).truncate();
+        num p2 = (p1 + (((Math.random() * 10).truncate() % numOfPlanets-2) + 1)) % numOfPlanets;
+         
+        planets[p1].player = 1;
+        planets[p1].ships = 10;
+        planets[p2].player = 2;
+        planets[p2].ships = 10;
+        
+        return planets;
+    } 
 }
 
 class Konquest {
-    Vector2D screenSize;
+    static Vector2D screenSize;
+    static num outerCircle;
+    static num innerCircle;
 
     List<Circle> grid;
     List<Circle> stars;
@@ -52,17 +97,9 @@ class Konquest {
     Konquest() {
         screenSize = new Vector2D(window.innerWidth, window.innerHeight);
         
-        num outerCircle = (screenSize.x > screenSize.y) ? screenSize.y / 2 : screenSize.x / 2;
-        num innerCircle = outerCircle / 100 * 20;   
-
-        grid = new List<Circle>(4);
-        for(int i=0; i<grid.length; i++) {
-            grid[i] = new Circle();
-            grid[i].center = screenSize/2;
-            grid[i].size = (outerCircle / 100) * (25 * (4-i));
-            grid[i].stroke = 'green';
-        }
-
+        outerCircle = (screenSize.x > screenSize.y) ? screenSize.y / 2 : screenSize.x / 2;
+        innerCircle = outerCircle / 100 * 20;   
+        
         stars = new List<Circle>(50);
         for(int i=0; i<stars.length; i++) {
             stars[i] = new Circle();
@@ -70,29 +107,23 @@ class Konquest {
             stars[i].size = outerCircle / 250;
             stars[i].style = 'fill:white';
         }
+
+        grid = new List<Circle>(6);
+        for(int i=0; i<grid.length; i++) {
+            grid[i] = new Circle();
+            grid[i].center = screenSize/2;
+            grid[i].size = ((outerCircle - innerCircle) / 5) * i + innerCircle; 
+            grid[i].stroke = 'green';
+            grid[i].style = 'fill-opacity:0.0';
+        }
         
         sun = new Circle();
         sun.center = screenSize / 2;
         sun.size = outerCircle / 100 * 10;
         sun.addGradient('SunGradient', 'rgb(255,255,0)', 'rgb(255,0,0)');
         sun.style = 'fill:url(#SunGradient)';
-        
-        planets = new List<Planet>(10);
-        for(int i=0; i<planets.length; i++) {
-            num tmpX = Math.random() * (outerCircle - innerCircle) + innerCircle;
-            num tmpRot = Math.random()*360;
-        
-            planets[i] = new Planet();
-            planets[i].center = new Vector2D(tmpX, 0);
-            planets[i].center.rotate(tmpRot);
-            planets[i].center += screenSize / 2;
-            planets[i].size = Math.random() * (outerCircle / 80) + (outerCircle / 80);
-            planets[i].addGradient('WhitePlanetGradient', 'rgb(255,255,255)', 'rgb(128,128,128)');
-            planets[i].style = 'fill:url(#WhitePlanetGradient)';
-            planets[i].rotation = Math.random() / 3;
-            planets[i].player = 1;
-            planets[i].ships = 5;
-        }
+
+        planets = Planet.Factory(10);
         
         window.setInterval((){update();}, 1000 / 25);
         window.addEventListener('resize', (e){resize();});
@@ -104,7 +135,7 @@ class Konquest {
         screenSize.y = window.innerHeight;
         
         Vector2D scale = screenSize / oldScreenSize;
-        Vector2D scale2 = screenSize / (grid[0].size * 2);
+        Vector2D scale2 = screenSize / (grid[grid.length-1].size * 2);
         
         num maxScale = (screenSize.x > screenSize.y) ? scale2.y : scale2.x;
         

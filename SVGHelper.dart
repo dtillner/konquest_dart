@@ -120,6 +120,8 @@ class TextField {
 class Circle {
     SVGElement _node;
     Map _values;
+    
+    //FIXIT: multiple instances of static variable (dart bug?) 
     static Set<Gradient> _gradients;
 
     Circle() {
