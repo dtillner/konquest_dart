@@ -14,17 +14,11 @@ class Planet extends Circle {
     Planet() {
         _text = new TextField(2);        
         _text.font = 'Iceland';
-        _text.size = 15;
     }
-     
-    set size(num size) {
-        num oldSize = super.size;
-        super.size = size;
-        
-        if(oldSize != null) {
-            num scale = size / oldSize;
-            _text.size *= scale;
-        }
+    
+    num get textSize() => _text.size;
+    set textSize(num textSize) {
+        _text.size = textSize;
     }
     
     set center(Vector2D center) {
@@ -62,7 +56,8 @@ class Planet extends Circle {
             planets[i] = new Planet();
             
             planets[i].type = (Math.random()*10).truncate() % 4;
-            planets[i].size = orbitRange * (0.2 + planets[i].type * 0.05); 
+            planets[i].size = orbitRange * (0.2 + planets[i].type * 0.05);
+            planets[i].textSize = 18;
 
             planets[i].center = new Vector2D(orbitRange*i + Konquest.innerCircle + orbitRange/2, 0);
             planets[i].center.rotate(Math.random()*360);
@@ -70,18 +65,24 @@ class Planet extends Circle {
             
             planets[i].rotation = (Math.random() - 0.5) / 5;
             
-           planets[i].player = 0;
-           planets[i].ships = (Math.random()*10).round();
+            planets[i].player = 0;
+            planets[i].ships = (Math.random()*10).round();
         }
         
-        //TODO: this is ugly
-        num p1 = (Math.random() * 10).truncate();
-        num p2 = (p1 + (((Math.random() * 10).truncate() % numOfPlanets-2) + 1)) % numOfPlanets;
+        num p1 = (Math.random() * 10).truncate() % 5;
+        num p2 = ((Math.random() * 10).truncate() % 5) + 5;     
+                
+        num type = (Math.random()*10).truncate() % 4;
+        num size = orbitRange * (0.2 + type * 0.05); 
          
         planets[p1].player = 1;
         planets[p1].ships = 10;
+        planets[p1].type = type;
+        planets[p1].size = size;
         planets[p2].player = 2;
         planets[p2].ships = 10;
+        planets[p2].type = type;
+        planets[p2].size = size;
         
         return planets;
     } 
@@ -128,8 +129,25 @@ class Konquest {
 
         planets = Planet.Factory(10);
         
-        window.setInterval((){update();}, 1000 / 25);
+        window.setInterval((){update();}, 5000);
+        window.setInterval((){render();}, 1000 / 25);
         window.addEventListener('resize', (e){resize();});
+    }
+
+    void update() {
+        for(int i=0; i<planets.length; i++) {
+            if(planets[i].player > 0) {
+                planets[i].ships++;
+            }
+        }
+    }
+
+    void render() {
+        for(var i=0; i<planets.length; i++) {
+            planets[i].center -= screenSize/2;
+            planets[i].center.rotate(planets[i].rotation);
+            planets[i].center += screenSize/2;
+        }
     }
 
     void resize() {                
@@ -159,15 +177,8 @@ class Konquest {
             planets[i].center -= oldScreenSize / 2;
             planets[i].center *= maxScale;
             planets[i].size *= maxScale;
+            planets[i].textSize *= maxScale;
             planets[i].center += screenSize / 2;
-        }
-    }
-    
-    void update() {
-        for(var i=0; i<planets.length; i++) {
-            planets[i].center -= screenSize/2;
-            planets[i].center.rotate(planets[i].rotation);
-            planets[i].center += screenSize/2;
         }
     }
 }
