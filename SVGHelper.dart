@@ -1,5 +1,3 @@
-final String svgNS = 'http://www.w3.org/2000/svg';
-
 class Gradient implements Hashable {
     SVGElement _node;
     Map<String, String> _attributes;
@@ -22,15 +20,15 @@ class Gradient implements Hashable {
     }
     
     SVGElement get node() {
-        _node = document.createElementNS(svgNS, 'radialGradient');
+        _node = new SVGElement.tag('radialGradient');
         
-        _attributes.forEach((k,v) => _node.setAttribute(k, v));
+        _attributes.forEach((k,v) => _node.attributes[k] = v);
         
         for(int i=0; i<_colors.length; i++) {
-            SVGElement stop = document.createElementNS(svgNS, 'stop');
-            stop.setAttribute('offset', _offsets[i]);
-            stop.setAttribute('style', 'stop-color:${_colors[i]}; stop-opacity:${_opacities[i]}');
-            _node.appendChild(stop);
+            SVGElement stop = new SVGElement.tag('stop');
+            stop.attributes['offset'] = _offsets[i];
+            stop.attributes['style'] = 'stop-color:${_colors[i]}; stop-opacity:${_opacities[i]}';
+            _node.nodes.add(stop);
         }
         
         return _node;
@@ -66,15 +64,15 @@ class TextField {
     num _size;
 
     TextField(num lines) {
-        _node = document.createElementNS(svgNS, 'text');
-        document.documentElement.appendChild(_node);
+        _node = new SVGElement.tag('text');
+        document.documentElement.nodes.add(_node);
         
         _lines = new List<String>(lines);
         _lineNodes = new List<SVGElement>(lines);
         
         for(int i=0; i<_lineNodes.length; i++) {
-            _lineNodes[i] = document.createElementNS(svgNS, 'tspan');
-            _node.appendChild(_lineNodes[i]);
+            _lineNodes[i] = new SVGElement.tag('tspan');
+            _node.nodes.add(_lineNodes[i]);
         }
     }
     
@@ -83,37 +81,38 @@ class TextField {
         _position = position;
 
         for(int i=0; i<_lineNodes.length; i++) {
-            _lineNodes[i].setAttribute('x', _position.x.toString());
+            _lineNodes[i].attributes['x'] = _position.x.toString();
         }
-        _node.setAttribute('y', _position.y.toString());
+        _node.attributes['y'] = _position.y.toString();
     }
     
     String getLine(num line) => _lines[line];
     setLine(num line, String text) {
         _lines[line] = text;
-        _node.childNodes[line].textContent = text;
+        //_node.nodes[line].textContent = text;
+        _node.nodes[line].text = text;
     }
     
     String get color() => _color;
     set color(String color) {
         _color = color;
-        _node.setAttribute('style', 'fill:$_color; font-family:$_font; font-size:$_size;');
+        _node.attributes['style'] = 'fill:$_color; font-family:$_font; font-size:$_size;';
     }
     
     String get font() => _font;
     set font(String font) {
         _font = font;
-        _node.setAttribute('style', 'fill:$_color; font-family:$_font; font-size:$_size;');
+        _node.attributes['style'] = 'fill:$_color; font-family:$_font; font-size:$_size;';
     }
     
     num get size() => _size;
     set size(num size) {
         _size = size;
-        _node.setAttribute('style', 'fill:$_color; font-family:$_font; font-size:$_size;');
+        _node.attributes['style'] = 'fill:$_color; font-family:$_font; font-size:$_size;';
         
-        _lineNodes[0].setAttribute('dy', 0);
+        _lineNodes[0].attributes['dy'] = 0;
         for(int i=1; i<_lineNodes.length; i++) {
-            _lineNodes[i].setAttribute('dy', size);
+            _lineNodes[i].attributes['dy'] = size;
         }
     }
 }
@@ -126,34 +125,34 @@ class Circle {
     static Set<Gradient> _gradients;
 
     Circle() {
-        _node = document.createElementNS(svgNS, 'circle');
+        _node = new SVGElement.tag('circle');
         _values = new Map();
         _gradients = new Set<Gradient>();
-        document.documentElement.appendChild(_node);
+        document.documentElement.nodes.add(_node);
     }
     
     num get size() => _values['size'];
     set size(num size) {
-        _node.setAttribute('r', size.toString());
+        _node.attributes['r'] = size.toString();
         _values['size'] = size;
     }
     
     Vector2D get center() => _values['center'];
     set center(Vector2D center) {
-        _node.setAttribute('cx', center.x.toString());
-        _node.setAttribute('cy', center.y.toString());
+        _node.attributes['cx'] = center.x.toString();
+        _node.attributes['cy'] = center.y.toString();
         _values['center'] = center;        
     }
     
-    num get stroke() => _values['stroke'];
+    String get stroke() => _values['stroke'];
     set stroke(String stroke) {
-        _node.setAttribute('stroke', stroke);
+        _node.attributes['stroke'] = stroke;
         _values['stroke'] = stroke;
     }
     
-    num get style() => _values['style'];
+    String get style() => _values['style'];
     set style(String style) {
-        _node.setAttribute('style', style);
+        _node.attributes['style'] = style;
         _values['style'] = style;
     }
     
@@ -164,7 +163,7 @@ class Circle {
 
         if(!_gradients.contains(g)) {
             _gradients.add(g);
-            document.getElementsByTagNameNS(svgNS, 'defs')[0].appendChild(g.node);
+            document.queryAll('defs')[0].nodes.add(g.node);
         }
     }
 }

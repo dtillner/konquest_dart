@@ -1,4 +1,4 @@
-#import('dart:dom');
+#import('dart:html');
 #import('lib/Toolbox.dart');
 #source('SVGHelper.dart');
 
@@ -131,7 +131,7 @@ class Konquest {
         
         window.setInterval((){update();}, 5000);
         window.setInterval((){render();}, 1000 / 25);
-        window.addEventListener('resize', (e){resize();});
+        window.on.resize.add((e){resize();});
     }
 
     void update() {
