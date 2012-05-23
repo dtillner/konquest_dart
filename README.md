@@ -3,7 +3,7 @@
 Konquest is a small Tech demo to experiment with the __dart__ language and __SVG__.
 It is inspired by [Qonk Game](http://anthony.liekens.net/index.php/Computers/Qonk)
 
-![Konquest Screenshot @ revision 522378ec24abdaecd7f4cdd03457f7fc0e464c1](http://cloud.github.com/downloads/dtillner/konquest_dart/konquest_screenshoot_522378ec24abdaecd7f4cdd03457f7fc0e464c1.png)
+![Konquest Screenshot @ revision 522378ec24abdaecd7f4cdd03457f7fc0e464c1](http://github.com/downloads/dtillner/konquest_dart/konquest_screenshoot.png)
 
 ## Status ##
 
